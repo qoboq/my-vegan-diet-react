@@ -16,11 +16,37 @@ import bgimage from '../assets/background.png';
 
 function LandingPage() {
   const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('Diet Plan'); // Assuming you have a subject
+  const [text, setText] = useState('balbalbalbalba'); // Assuming you have text content
 
-  // Function to handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle the email submission logic
+
+    const formData = {
+      to: email,
+      subject: subject,
+      text: text,
+    };
+
+    try {
+      const response = await fetch('https://my-vegan-diet-react.vercel.app/api/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const responseBody = await response.text();
+        alert('Email sent successfully: ' + responseBody);
+      } else {
+        alert('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Error sending email');
+    }
   };
 
   return (
